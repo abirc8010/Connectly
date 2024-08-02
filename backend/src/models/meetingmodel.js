@@ -1,4 +1,4 @@
-const meetingSchema=new Scema(
+const meetingSchema=new Schema(
     {
         user_id:{
             type:String
