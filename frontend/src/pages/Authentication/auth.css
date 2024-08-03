@@ -9,10 +9,7 @@
 .auth-field{
     height: 40px;
     width: 200px;
-    border-radius:20px;
     border:none;
-    box-shadow: 0 2px 8px black;
-    padding: 5px 5px 5px 10px;
 }
 .register{
   background-color: rgb(246, 250, 246);
@@ -31,8 +28,8 @@
     align-items: center;
     height:340px;
     width:270px;
-    justify-content: space-around;
-    margin-top: 8px;
+    justify-content: space-evenly;
+    margin-top: 2px;
 }
 @media (max-width: 768px) {
     .auth-body {

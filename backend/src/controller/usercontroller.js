@@ -12,7 +12,8 @@ const login=async(req,res)=>{
           if(!user){
             return res.httpStatus.NOT_FOUND.json({message:"User does not exist"});
           }
-          if(bcrypt.compare(password,user.password)){
+          const isValid=await bcrypt.compare(password,user.password);
+          if(isValid){
             let token=crypto.randomBytes(20).toString('hex');
             user.token=token;
             await user.save();
