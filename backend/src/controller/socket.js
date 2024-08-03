@@ -13,6 +13,7 @@ export const initializeSocket = (server) => {
         }
     });
     io.on('connection', (socket) => {
+        console.log("connected");
         socket.on("join", (path) => {
             if (connections[path] === undefined)
                 connections[path] = []
