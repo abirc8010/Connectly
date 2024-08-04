@@ -431,17 +431,16 @@ export default function VideoMeetComponent() {
         getMedia();
     }
 
-    const handleVideoClick = (stream, selectedVideoRef) => {
-        if (localVideoRef.current && selectedVideoRef.current) {
-            // Store the current stream
-            const currentStream = localVideoRef.current.srcObject;
-
-            // Set the new stream to the local video reference
-            localVideoRef.current.srcObject = stream;
-
-            // Set the stored current stream to the selected video element
-            selectedVideoRef.current.srcObject = currentStream;
-        }
+    const handleVideoClick = (video) => {
+        const tempStream = localVideoRef.current.srcObject;
+        localVideoRef.current.srcObject = video.stream;
+        video.stream = tempStream;
+        setVideos((prevVideos) => prevVideos.map((v) => {
+            if (v.socketId === video.socketId) {
+                return { ...v, stream: tempStream };
+            }
+            return v;
+        }));
     };
     return (
         <div>
@@ -511,7 +510,7 @@ export default function VideoMeetComponent() {
                             {
                                 videos.map((video) => (
 
-                                    <div key={video.socketId} onClick={(e) => handleVideoClick(video.stream, e.currentTarget.querySelector('video'))} style={{ cursor: "pointer" }}>
+                                    <div key={video.socketId} onClick={() => handleVideoClick(video)} style={{ cursor: "pointer" }}>
                                         <video
 
                                             data-socket={video.socketId}
@@ -533,7 +532,7 @@ export default function VideoMeetComponent() {
                             <video className="meetUserVideo" style={{ display: video ? 'block' : 'none', }} ref={localVideoRef} autoPlay muted></video>
 
                         ) : (
-                            <img src="nocamera.png" alt="No Camera" style={{ display: 'block' ,objectFit:"fill",height:"70vh"}} />
+                            <img src="nocamera.png" alt="No Camera" style={{ display: 'block', objectFit: "fill", height: "70vh" }} />
                         )}
                     </div>
 
