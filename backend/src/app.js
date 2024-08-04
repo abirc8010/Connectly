@@ -18,7 +18,7 @@ app.use(express.urlencoded({ limit: "50kb", extended: true }));
 app.use("/api/v1/users", router);
 const start = async () => {
     app.set("mongo_user")
-    const connectionDb = await mongoose.connect(process.env.MONGODB_URL);
+    await mongoose.connect(process.env.MONGODB_URL);
     server.listen(app.get("port"), () => {
         console.log("on port 8000")
     });
