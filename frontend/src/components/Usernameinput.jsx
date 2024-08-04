@@ -3,7 +3,7 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-const UsernameInput = ({ setUsername, connect, username }) => {
+const UsernameInput = ({ setUsername, connect, username ,localVideoRef}) => {
   return (
     <div>
       <h1>Join Meeting</h1>
@@ -11,6 +11,9 @@ const UsernameInput = ({ setUsername, connect, username }) => {
       <Button variant="contained" onClick={connect}>
         Connect
       </Button>
+      <div>
+        <video ref={localVideoRef} autoPlay muted></video>
+      </div>
     </div>
   );
 };
