@@ -487,11 +487,12 @@ export default function VideoMeetComponent() {
                         <IconButton onClick={handleVideo} style={{ color: "white" }}>
                             {(video === true) ? <VideocamIcon /> : <VideocamOffIcon />}
                         </IconButton>
-                        <IconButton onClick={handleEndCall} style={{ color: "red" }}>
-                            <CallEndIcon />
-                        </IconButton>
+
                         <IconButton onClick={handleAudio} style={{ color: "white" }}>
                             {audio === true ? <MicIcon /> : <MicOffIcon />}
+                        </IconButton>
+                        <IconButton onClick={handleEndCall} style={{ color: "red" }}>
+                            <CallEndIcon />
                         </IconButton>
 
                         {screenAvailable === true ?
@@ -526,16 +527,16 @@ export default function VideoMeetComponent() {
 
                                 ))}
                         </div>
-                    </div>
-                    <div className="contain">
-                        {video ? (
-                            <video className="meetUserVideo" style={{ display: video ? 'block' : 'none', }} ref={localVideoRef} autoPlay muted></video>
+                        <div className="contain">
+                            {video ? (
+                                <video className="meetUserVideo" style={{ display: video ? 'block' : 'none', }} ref={localVideoRef} autoPlay muted></video>
 
-                        ) : (
-                            <img src="nocamera.png" alt="No Camera" style={{ display: 'block', objectFit: "fill", height: "70vh" }} />
-                        )}
-                    </div>
+                            ) : (
+                                <img src="nocamera.png" alt="No Camera"  />
+                            )}
+                        </div>
 
+                    </div>
 
                 </div>
 
