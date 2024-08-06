@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import io from "socket.io-client";
 import { Badge, IconButton, TextField } from '@mui/material';
 import { Button } from '@mui/material';
+import WindowIcon from '@mui/icons-material/Window';
+import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff'
 import "./meet.css"
@@ -57,7 +59,9 @@ export default function VideoMeetComponent() {
 
     let [videos, setVideos] = useState([])
 
+    let [grid, setGrid] = useState(false);
 
+    
     useEffect(() => {
         getPermissions();
 
@@ -121,7 +125,7 @@ export default function VideoMeetComponent() {
         }
 
 
-    }, [video, audio])
+    }, [video, audio,grid])
     let getMedia = () => {
         setVideo(videoAvailable);
         setAudio(audioAvailable);
@@ -442,6 +446,9 @@ export default function VideoMeetComponent() {
             return v;
         }));
     };
+    const handleGrid = () => {
+        setGrid(!grid);
+    }
     return (
         <div>
 
@@ -484,10 +491,13 @@ export default function VideoMeetComponent() {
 
 
                     <div className="buttonContainers">
-                        <IconButton onClick={handleVideo} style={{ color: "white" }}>
+
+                        <IconButton style={{ color: "white" }} onClick={handleGrid}>
+                            {(grid === false) ? <WindowIcon /> : <ViewSidebarIcon />}
+                        </IconButton>
+                        <IconButton onClick={handleVideo} style={{ color: "white" }} >
                             {(video === true) ? <VideocamIcon /> : <VideocamOffIcon />}
                         </IconButton>
-
                         <IconButton onClick={handleAudio} style={{ color: "white" }}>
                             {audio === true ? <MicIcon /> : <MicOffIcon />}
                         </IconButton>
@@ -506,12 +516,51 @@ export default function VideoMeetComponent() {
                         </Badge>
 
                     </div>
-                    <div className="conferenceView">
-                        <div className="users-video">
+                    {grid === false ? (
+                        <div className="conferenceView">
+                            <div className="users-video">
+                                {
+                                    videos.map((video) => (
+
+                                        <div key={video.socketId} onClick={() => handleVideoClick(video)} style={{ cursor: "pointer" }}>
+                                            <video
+
+                                                data-socket={video.socketId}
+                                                ref={ref => {
+                                                    if (ref && video.stream) {
+                                                        ref.srcObject = video.stream;
+                                                    }
+                                                }}
+                                                autoPlay
+                                            >
+                                            </video>
+                                        </div>
+
+                                    ))}
+                            </div>
+                            <div className="contain">
+                                {video ? (
+                                    <video className="meetUserVideo" style={{ display: video ? 'block' : 'none', }} ref={localVideoRef} autoPlay muted></video>
+
+                                ) : (
+                                    <img src="nocamera.png" alt="No Camera" />
+                                )}
+                            </div>
+
+                        </div>) : (
+                        <div className="grid-users-video">
+                            <div className="video-container">
+                                {video ? (
+                                    <video  ref={localVideoRef} autoPlay muted></video>
+
+                                ) : (
+                                    <img src="nocamera.png" alt="No Camera" />
+                                )}
+                            </div>
                             {
                                 videos.map((video) => (
 
-                                    <div key={video.socketId} onClick={() => handleVideoClick(video)} style={{ cursor: "pointer" }}>
+                                    <div key={video.socketId} style={{ cursor: "pointer" }} className="video-container">
                                         <video
 
                                             data-socket={video.socketId}
@@ -527,16 +576,9 @@ export default function VideoMeetComponent() {
 
                                 ))}
                         </div>
-                        <div className="contain">
-                            {video ? (
-                                <video className="meetUserVideo" style={{ display: video ? 'block' : 'none', }} ref={localVideoRef} autoPlay muted></video>
 
-                            ) : (
-                                <img src="nocamera.png" alt="No Camera"  />
-                            )}
-                        </div>
-
-                    </div>
+                    )
+                    }
 
                 </div>
 
