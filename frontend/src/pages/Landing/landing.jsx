@@ -1,14 +1,16 @@
 import React from "react";
 import "./landing.css";
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom'
 export default function Landing() {
+    let Navigate = useNavigate();
     return (
         <div className="landing-page">
             <div className="navbar">
                 <div className="main-header">  <img src="logo.svg" style={{width:"50px",height:"50px"}}></img> Connectly </div>
                 <div className="actions">
                     <div>
-                        <Button variant="contained" size="medium" sx={{ backgroundColor: "rgb(92, 16, 125)" }}> Join as Guest</Button>
+                        <Button variant="contained" size="medium" sx={{ backgroundColor: "rgb(92, 16, 125)" }} onClick={()=>Navigate("/join")}> Join as Guest</Button>
                     </div>
                     <div>
                         <Button variant="contained" size="medium" sx={{ backgroundColor: "rgb(92, 16, 125)" }}> <a href="/auth" style={{textDecoration:"none",color:"#ffffff"}}>Register</a></Button>

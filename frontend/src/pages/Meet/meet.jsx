@@ -14,6 +14,7 @@ import ScreenShareIcon from '@mui/icons-material/ScreenShare';
 import StopScreenShareIcon from '@mui/icons-material/StopScreenShare'
 import ChatIcon from '@mui/icons-material/Chat'
 import UsernameInput from '../../components/Usernameinput';
+import withAuth from '../../utils/withAuth.jsx';
 const server_url = import.meta.env.VITE_SERVER_URL;
 
 var connections = {};
@@ -24,7 +25,7 @@ const peerConfigConnections = {
     ]
 }
 
-export default function VideoMeetComponent() {
+function VideoMeetComponent() {
 
     var socketRef = useRef();
     let socketIdRef = useRef();
@@ -49,7 +50,7 @@ export default function VideoMeetComponent() {
 
     let [message, setMessage] = useState("");
 
-    let [newMessages, setNewMessages] = useState(3);
+    let [newMessages, setNewMessages] = useState('');
 
     let [askForUsername, setAskForUsername] = useState(true);
 
@@ -587,3 +588,4 @@ export default function VideoMeetComponent() {
         </div>
     )
 }
+export default withAuth(VideoMeetComponent);
