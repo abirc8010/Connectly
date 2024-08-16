@@ -450,6 +450,7 @@ function VideoMeetComponent() {
     const handleGrid = () => {
         setGrid(!grid);
     }
+    const videoStyle = {};
     return (
         <div>
 
@@ -525,7 +526,7 @@ function VideoMeetComponent() {
 
                                         <div key={video.socketId} onClick={() => handleVideoClick(video)} style={{ cursor: "pointer" }}>
                                             <video
-
+                                                style={videoStyle}
                                                 data-socket={video.socketId}
                                                 ref={ref => {
                                                     if (ref && video.stream) {
@@ -541,7 +542,7 @@ function VideoMeetComponent() {
                             </div>
                             <div className="contain">
                                 {video ? (
-                                    <video className="meetUserVideo" style={{ display: video ? 'block' : 'none', }} ref={localVideoRef} autoPlay muted></video>
+                                    <video className="meetUserVideo" style={{ display: video ? 'block' : 'none',transform:screen==true?"scaleX(-1)":{}}} ref={localVideoRef} autoPlay muted></video>
 
                                 ) : (
                                     <img src="nocamera.png" alt="No Camera" />
@@ -552,7 +553,7 @@ function VideoMeetComponent() {
                         <div className="grid-users-video">
                             <div className="video-container">
                                 {video ? (
-                                    <video  ref={localVideoRef} autoPlay muted></video>
+                                    <video  ref={localVideoRef}   style={videoStyle} autoPlay muted></video>
 
                                 ) : (
                                     <img src="nocamera.png" alt="No Camera" />
@@ -563,7 +564,7 @@ function VideoMeetComponent() {
 
                                     <div key={video.socketId} style={{ cursor: "pointer" }} className="video-container">
                                         <video
-
+                                            style={videoStyle}
                                             data-socket={video.socketId}
                                             ref={ref => {
                                                 if (ref && video.stream) {

@@ -40,7 +40,7 @@ function WaitingRoom() {
             <div className="meetContainer">
                 <div className="leftPanel">
                     <div>
-                        <h2 style={{color:"rgb(92, 16, 125)"}} >Enjoy high-quality video calls effortlessly on our site.</h2>
+                        <h1 style={{color:"rgb(92, 16, 125)"}} >Enjoy high-quality video calls effortlessly on our site.</h1>
 
                         <div style={{ display: 'flex', gap: "10px" }}>
 

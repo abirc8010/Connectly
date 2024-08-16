@@ -1,3 +1,13 @@
+.main-header {
+    font-size: 40px;
+    color: rgb(92, 16, 125);
+    font-weight: 900;
+    width:230px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 .meetVideoContainer {
     position: absolute;
     top: 0;
