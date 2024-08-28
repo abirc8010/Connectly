@@ -1,2 +1,2 @@
-# WebMeet
+# Connectly
 A video conferencing website
