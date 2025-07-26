@@ -1,14 +1,13 @@
 .main-header {
-    font-size: 40px;
-    color: rgb(92, 16, 125);
-    font-weight: 900;
-    width:230px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  font-size: 40px;
+  color: rgb(92, 16, 125);
+  font-weight: 900;
+  width: 230px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-
 
 .navBar {
   display: flex;
@@ -16,23 +15,12 @@
   justify-content: space-between;
   padding-inline: 20px;
   text-align: center;
-
 }
-.meetContainer {
-  display: flex;
-  padding-inline: 20px;
-  height: 80vh;
-  gap: 10vw;
-  justify-content: center;
-}
-
-
 
 .leftPanel {
   height: 100%;
   display: flex;
   align-items: center;
-
 }
 
 .rightPanel {
@@ -44,4 +32,17 @@
   width: 30vw;
   height: auto;
   border-radius: 20px;
+}
+.meetContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.leftPanel {
+  background: white;
+}
+
+.rightPanel {
+  background: #f3f0fa;
 }

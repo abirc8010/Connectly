@@ -1,85 +1,197 @@
-import React, { useEffect } from "react";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { Box, Typography, Container } from "@mui/material";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  Box,
+  Typography,
+  Container,
+  TextField,
+  Button,
+  IconButton,
+  Avatar,
+  Tooltip,
+  Paper,
+  Stack,
+} from "@mui/material";
+import { Videocam, VideocamOff, Mic, MicOff } from "@mui/icons-material";
 
-const UsernameInput = ({ setUsername, connect, username, localVideoRef }) => {
-  useEffect(() => {
-    const startVideoStream = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream;
-        }
-      } catch (error) {
-        console.error("Error accessing webcam: ", error);
+const UsernameInput = ({ username, setUsername, connect }) => {
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
+
+  const [videoOn, setVideoOn] = useState(true);
+  const [micOn, setMicOn] = useState(true);
+
+  const updateStream = async (wantVideo, wantAudio) => {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+
+    try {
+      const newStream = await navigator.mediaDevices.getUserMedia({
+        video: wantVideo,
+        audio: wantAudio,
+      });
+
+      streamRef.current = newStream;
+      if (!wantVideo) {
+        videoRef.current.srcObject = null;
+        return;
       }
-    };
+      if (videoRef.current) {
+        videoRef.current.srcObject = newStream;
+      }
+    } catch (err) {
+      console.error("Error accessing media devices:", err);
+    }
+  };
 
-    startVideoStream();
-  }, [localVideoRef]);
+  useEffect(() => {
+    updateStream(videoOn, micOn);
+    return () => {
+      streamRef.current?.getTracks().forEach((t) => t.stop());
+    };
+  }, []);
+
+  const toggleVideo = async () => {
+    const newVideoState = !videoOn;
+    setVideoOn(newVideoState);
+    await updateStream(newVideoState, micOn);
+  };
+
+  const toggleMic = async () => {
+    const newMicState = !micOn;
+    setMicOn(newMicState);
+    await updateStream(videoOn, newMicState);
+  };
 
   return (
     <>
-      <header className="main-header">
-        <img src="logo.svg" alt="Logo" style={{ width: "50px", height: "50px" }} />
-        Connectly
-      </header>
-      <Container sx={{ height: 'calc(100vh - 60px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Box
+        component="header"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          px: 2,
+          py: 1,
+          borderBottom: 1,
+          borderColor: "divider",
+        }}
+      >
+        <img src="logo.svg" alt="Logo" width={40} height={40} />
+        <Typography variant="h6" sx={{ ml: 1 }}>
+          Connectly
+        </Typography>
+      </Box>
+
+      <Container
+        maxWidth="lg"
+        sx={{
+          height: "calc(100vh - 64px)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 2,
+        }}
+      >
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 2,
-            width: '100%',
-            maxWidth: '1200px',
-            textAlign: { xs: 'center', sm: 'left' },
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            gap: 4,
+            alignItems: "center",
+            width: "100%",
+            maxWidth: 1200,
           }}
         >
-          <Box
+          <Paper
+            elevation={3}
             sx={{
-              flex: '1 1 auto',
-              maxWidth: '500px',
-              width: '100%',
+              position: "relative",
+              width: { xs: "100%", md: 480 },
+              aspectRatio: "4/3",
+              overflow: "hidden",
+              borderRadius: 2,
+              backgroundColor: "black",
             }}
           >
-            <video
-              ref={localVideoRef}
-              autoPlay
-              muted
-              style={{
-                width: '100%',
-                borderRadius: '8px',
-                transform: 'scaleX(-1)', // Flips the video horizontally
+            {videoOn ? (
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                playsInline
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  transform: "scaleX(-1)",
+                }}
+              />
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "grey.900",
+                }}
+              >
+                <Avatar
+                  sx={{
+                    width: 96,
+                    height: 96,
+                    fontSize: 32,
+                    bgcolor: "primary.main",
+                  }}
+                >
+                  {username?.[0]?.toUpperCase() || "U"}
+                </Avatar>
+              </Box>
+            )}
+
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{
+                position: "absolute",
+                bottom: 8,
+                left: "50%",
+                transform: "translateX(-50%)",
+                bgcolor: "rgba(0,0,0,0.4)",
+                borderRadius: 1,
+                p: 0.5,
               }}
-            />
-          </Box>
-          <Box
-            sx={{
-              flex: '1 1 auto',
-              maxWidth: '400px',
-              width: '100%',
-            }}
-          >
-            <Typography variant="h4" mb={2}>
+            >
+              <Tooltip title={videoOn ? "Turn off camera" : "Turn on camera"}>
+                <IconButton onClick={toggleVideo} sx={{ color: "white" }}>
+                  {videoOn ? <Videocam /> : <VideocamOff />}
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={micOn ? "Mute mic" : "Unmute mic"}>
+                <IconButton onClick={toggleMic} sx={{ color: "white" }}>
+                  {micOn ? <Mic /> : <MicOff />}
+                </IconButton>
+              </Tooltip>
+            </Stack>
+          </Paper>
+
+          <Box sx={{ flex: 1, maxWidth: 400 }}>
+            <Typography variant="h4" gutterBottom>
               Join Meeting
             </Typography>
             <TextField
               label="Username"
-              onChange={(e) => setUsername(e.target.value)}
-              value={username}
+              variant="outlined"
               fullWidth
-              margin="normal"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <Button
               variant="contained"
               color="primary"
-              onClick={connect}
-              disabled={!username}
               fullWidth
-              sx={{ mt: 2 }}
+              disabled={!username}
+              onClick={connect}
+              sx={{ mt: 2, py: 1.5 }}
             >
               Connect
             </Button>
